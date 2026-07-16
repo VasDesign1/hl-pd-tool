@@ -1,0 +1,71 @@
+rules_version = '2';
+
+// HL + PD Calculator — role-based rules.
+// Admin manages every user; regular users can only read their own doc.
+service cloud.firestore {
+  match /databases/{db}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function myUserDoc() {
+      return get(/databases/$(db)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(db)/documents/users/$(request.auth.uid))
+        && myUserDoc().role == 'admin';
+    }
+
+    function isActive() {
+      return signedIn()
+        && exists(/databases/$(db)/documents/users/$(request.auth.uid))
+        && myUserDoc().active == true;
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // ---------- users ----------
+    // Every account has a doc here. Admin manages them.
+    // A signed-in user can read their own doc (needed to check status,
+    // mustChangePassword, role). They can flip only their own
+    // `mustChangePassword` back to false after setting a new password.
+    match /users/{uid} {
+      allow read:   if isSelf(uid) || isAdmin();
+      allow create: if isAdmin()
+                    // Bootstrap: allow the first-time FO login to create its own admin doc
+                    || (isSelf(uid)
+                        && request.resource.data.role == 'admin'
+                        && request.resource.data.username == 'FO');
+      allow update: if isAdmin()
+                    || (isSelf(uid)
+                        && request.resource.data.diff(resource.data)
+                             .affectedKeys().hasOnly(['mustChangePassword', 'passwordChangedAt']));
+      allow delete: if isAdmin();
+    }
+
+    // ---------- config/coefficients ----------
+    // Any signed-in AND active user may read; only admin may write.
+    match /config/{doc} {
+      allow read:  if isActive();
+      allow write: if isAdmin();
+    }
+
+    // ---------- audit (optional, for future use) ----------
+    match /audit/{id} {
+      allow read:   if isAdmin();
+      allow create: if isAdmin();
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    // Everything else is closed by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

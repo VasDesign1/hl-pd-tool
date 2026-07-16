@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Firebase local caches
+.firebase/
+firebase-debug.log
+firestore-debug.log
+firebase-debug.*.log
+
+# Node (in case we ever add tooling)
+node_modules/
+
+# Local env / secrets (safe to keep out even though we don't use any)
+.env
+.env.local
+
+# Seed data — coefficient values that must NEVER be in the public repo.
+# Admin keeps a local copy and pastes it into Firestore during setup.
+seed/

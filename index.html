@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HL + PD Calculator</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app"></div>
+
+<!-- Third-party libs (offline copies) -->
+<script src="vendor/pdfjs/pdf.min.js"></script>
+<script src="vendor/pdf/html2canvas.min.js"></script>
+<script src="vendor/pdf/jspdf.umd.min.js"></script>
+
+<!-- Firebase (used by auth gate + admin panel) -->
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+<!-- App (auth.js first so it defines window.authGate before app.js's boot check) -->
+<script src="auth.js"></script>
+<script src="app.js"></script>
+<script src="takeoff.js"></script>
+</body>
+</html>
