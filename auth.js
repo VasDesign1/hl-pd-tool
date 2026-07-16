@@ -11,12 +11,12 @@
    Replace the placeholders after creating the `hl-pd-vicair` Firebase project
    (Firebase console → Project settings → General → Your apps → Web). */
 const _firebaseConfig = {
-  apiKey: "REPLACE_ME_FIREBASE_API_KEY",
+  apiKey: "AIzaSyCU4g03l2IlZXCImi_I7L78iu7t2MjZD04",
   authDomain: "hl-pd-vicair.firebaseapp.com",
   projectId: "hl-pd-vicair",
   storageBucket: "hl-pd-vicair.firebasestorage.app",
-  messagingSenderId: "REPLACE_ME_SENDER_ID",
-  appId: "REPLACE_ME_APP_ID",
+  messagingSenderId: "921016521453",
+  appId: "1:921016521453:web:20b2a859dc9e5c9a3232e4",
 };
 
 const AUTH_EMAIL_DOMAIN = "@hl-pd-vicair.local";
