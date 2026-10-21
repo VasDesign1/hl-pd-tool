@@ -36,11 +36,7 @@ service cloud.firestore {
     // `mustChangePassword` back to false after setting a new password.
     match /users/{uid} {
       allow read:   if isSelf(uid) || isAdmin();
-      allow create: if isAdmin()
-                    // Bootstrap: allow the first-time FO login to create its own admin doc
-                    || (isSelf(uid)
-                        && request.resource.data.role == 'admin'
-                        && request.resource.data.username == 'FO');
+      allow create: if isAdmin();
       allow update: if isAdmin()
                     || (isSelf(uid)
                         && request.resource.data.diff(resource.data)
